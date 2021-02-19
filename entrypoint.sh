@@ -15,7 +15,7 @@ echo "DEBUG, determined RESOLVERS from /etc/resolv.conf: '$RESOLVERS'"
 conf=""
 for ONE_RESOLVER in ${RESOLVERS}; do
 	echo "Possible resolver: $ONE_RESOLVER"
-	conf="resolver $ONE_RESOLVER; "
+	conf="resolver $ONE_RESOLVER ipv6=off; " #XXX: Disable IPv6 for now
 done
 
 echo "Final chosen resolver: $conf"
@@ -148,6 +148,8 @@ if [ "${ALLOW_PUSH}" = "true" ]; then
     cat <<EOF > /etc/nginx/conf.d/allowed.methods.conf
     # allow to upload big layers
     client_max_body_size 0;
+    # prevent [warn] 66#66: *313 a client request body is buffered to a temporary file
+    client_body_buffer_size 2000M;
 
     # only cache GET requests
     proxy_cache_methods GET;
@@ -173,6 +175,8 @@ elif [ "${ALLOW_PUSH_WITH_OWN_AUTH}" = "true" ]; then
 
     # allow to upload big layers
     client_max_body_size 0;
+    # prevent [warn] 66#66: *313 a client request body is buffered to a temporary file
+    client_body_buffer_size 2000M;
 
     # only cache GET requests
     proxy_cache_methods GET;

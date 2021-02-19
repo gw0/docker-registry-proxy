@@ -148,6 +148,8 @@ if [ "${ALLOW_PUSH}" = "true" ]; then
     cat <<EOF > /etc/nginx/conf.d/allowed.methods.conf
     # allow to upload big layers
     client_max_body_size 0;
+    # prevent [warn] 66#66: *313 a client request body is buffered to a temporary file
+    client_body_buffer_size 1000M;
 
     # only cache GET requests
     proxy_cache_methods GET;
@@ -173,6 +175,8 @@ elif [ "${ALLOW_PUSH_WITH_OWN_AUTH}" = "true" ]; then
 
     # allow to upload big layers
     client_max_body_size 0;
+    # prevent [warn] 66#66: *313 a client request body is buffered to a temporary file
+    client_body_buffer_size 1000M;
 
     # only cache GET requests
     proxy_cache_methods GET;
